@@ -1,0 +1,23 @@
+{
+  "name": "Feed Intent Viewer",
+  "version": "1.0",
+  "manifest_version": 2,
+  "app": {
+    "launch": {
+      "local_path": "main.html"
+    }
+  },
+  "intents": {
+    "http://webintents.org/view": [
+      {
+        "type": ["application/atom+xml", "application/rss+xml"],
+        "href": "main.html",
+        "title": "Feed Intent Viewer",
+        "disposition": "window"
+      }
+    ]
+  },
+  "permissions": [
+    "<all_urls>"
+  ]
+}
