@@ -13,7 +13,7 @@ onload = function() {
     return;
   }
 
-  var url = intent.getExtra('url') || intent.data;
+  var url = (intent.getExtra && getExtra('url')) || intent.data;
 
   if (url.indexOf('http') != 0 || url.indexOf('/') == -1) {
     showMessage('url-error', url);
