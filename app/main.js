@@ -1,31 +1,44 @@
 onload = function() {
   var intent = window.webkitIntent;
   if (!intent) {
-    // TODO(mihaip): show landing page
+    location.href = 'intro.html'
     return;
   }
 
+  // The intent dispatched by Chrome's download manager includes the downloaded
+  // bytes as a Blob (see ChromeDownloadManagerDelegate::OpenWithWebIntent) so
+  // we don't need to fech the data ourselves.
   if (intent.data instanceof Blob) {
     handleBlob(intent.data);
     return;
   }
 
-  var url = intent.data || intent.getExtra('url');
+  var url = intent.getExtra('url') || intent.data;
 
-  // TODO(mihaip): validate URL
+  if (url.indexOf('http') != 0 || url.indexOf('/') == -1) {
+    showMessage('url-error', url);
+    return;
+  }
+
+  showMessage('loading', url);
 
   var xhr = new XMLHttpRequest();
   xhr.overrideMimeType('text/xml');
   xhr.responseType = 'blob';
   xhr.onload = function() {
+    if (xhr.status >= 400) {
+      hideMessage('loading');
+      showMessage('loading-error', url);
+      return;
+    }
     handleBlob(xhr.response);
   };
   xhr.onerror = function() {
-    // TODO(mihaip)
+    hideMessage('loading');
+    showMessage('loading-error', url);
   };
   xhr.open('GET', url, true);
 
-  // TODO(mihaip): show progress
   xhr.send();
 }
 
@@ -41,6 +54,19 @@ function handleBlob(inputBlob) {
     location.href = webkitURL.createObjectURL(displayBlob);
   }
 
-  // TODO(mihaip): handle FileReader errors
+  reader.onerror = function() {
+    hideMessage('loading');
+    showMessage('reader-error', reader.error.name);
+  }
+
   reader.readAsText(inputBlob);
+}
+
+function showMessage(id, data) {
+  document.getElementById(id + '-data').textContent = data;
+  document.getElementById(id).style.display = '';
+}
+
+function hideMessage(id) {
+  document.getElementById(id).style.display = 'none';
 }

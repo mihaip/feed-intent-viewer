@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Feed Intent Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="intro.js"></script>
+</head>
+<body>
+  <h1>
+    Feed Intent Viewer
+  </h1>
+
+  <p>This is a simple <a href="http://webintents.org">Web Intent</a> that handles
+  the "view" intent for feeds (the <code>application/atom+xml</code> and
+  <code>application/rss+xml</code> types). The passed in feed is displayed
+  as pretty-printed XML. Developers that use Chrome 20 or later may find this
+  useful when trying to view raw feed data.</p>
+
+  <p>You may test it out by invoking the "view" intent for a feed below:</p>
+
+  <form id="intent-form">
+    <label>
+      Feed URL:
+      <input type="text" id="feed-url" size="60" value="http://feeds.feedburner.com/PersistentInfo">
+    </label>
+    <input type="submit" value="View">
+  </form>
+</body>
+</html>

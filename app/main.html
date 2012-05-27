@@ -2,10 +2,29 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>XML Intent Viewer</title>
+  <title>Feed Intent Viewer</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="main.js"></script>
 </head>
 <body>
-<pre id="feed"></pre>
+  <h1>
+    Feed Intent Viewer
+  </h1>
+
+  <div id="url-error" class="message" style="display: none">
+    Invoked with the data "<span id="url-error-data"></span>", which does not appear to be a URL.
+  </div>
+
+  <div id="loading" class="message" style="display: none">
+    Loading "<span id="loading-data"></span>"...
+  </div>
+
+  <div id="loading-error" class="message" style="display: none">
+    Could not load "<span id="loading-error-data"></span>"...
+  </div>
+
+  <div id="reader-error" class="message" style="display: none">
+    Could read feed contents, got error "<span id="reader-error-data"></span>".
+  </div>
 </body>
 </html>

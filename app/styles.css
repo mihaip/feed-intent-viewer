@@ -1,0 +1,48 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  margin: 0;
+}
+
+h1 {
+  margin: 0;
+  padding: .5em;
+  text-align: center;
+  font-size: 48px;
+  color: #fff;
+  background: #f60;
+  box-shadow: 0 0 10px 5px #888;
+}
+
+p {
+  max-width: 600px;
+  margin: 1em auto;
+}
+
+#intent-form {
+  text-align: center;
+  margin-top: 2em;
+}
+
+#feed-url {
+  border: solid 1px #ccc;
+  padding: 1px;
+  font-size: 18px;
+}
+
+input[type="submit"] {
+  font-size: 16px;
+  padding: 3px 7px;
+  border: solid 1px #ccc;
+  background: #eee;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.message {
+  max-width: 600px;
+  background: #eee;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 4em auto;
+}
