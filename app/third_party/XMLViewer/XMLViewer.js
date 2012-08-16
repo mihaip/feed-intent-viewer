@@ -30,64 +30,18 @@ var nodeParentPairs = [];
 
 // Script entry point.
 
-function prepareWebKitXMLViewer(noStyleMessage)
+function appendXmlViewer(sourceXML, containerNode)
 {
-    var html = createHTMLElement('html');
-    var head = createHTMLElement('head');
-    html.appendChild(head);
-    var style = createHTMLElement('style');
-    style.id = 'xml-viewer-style';
-    head.appendChild(style);
-    var body = createHTMLElement('body');
-    html.appendChild(body);
-    var sourceXML = createHTMLElement('div');
-    sourceXML.id = 'webkit-xml-viewer-source-xml';
-    body.appendChild(sourceXML);
-
-    var child;
-    while (child = document.firstChild) {
-        document.removeChild(child);
-        if (child.nodeType != Node.DOCUMENT_TYPE_NODE)
-            sourceXML.appendChild(child);
-    }
-    document.appendChild(html);
-
-    var header = createHTMLElement('div');
-    body.appendChild(header);
-    header.classList.add('header');
-    var headerSpan = createHTMLElement('span');
-    header.appendChild(headerSpan);
-    headerSpan.textContent = noStyleMessage;
-    header.appendChild(createHTMLElement('br'));
-
-    var tree = createHTMLElement('div');
-    body.appendChild(tree);
-    tree.classList.add('pretty-print');
-    tree.id = 'tree';
-    window.onload = sourceXMLLoaded;
-}
-
-function sourceXMLLoaded()
-{
-    var sourceXML = document.getElementById('webkit-xml-viewer-source-xml');
-    if (!sourceXML)
-        return; // Stop if some XML tree extension is already processing this document
-    //var style = document.head.firstChild;
-    //document.head.removeChild(style);
-    //document.head.appendChild(style);
-    var root = document.getElementById('tree');
+    containerNode.classList.add('pretty-print');
 
     for (var child = sourceXML.firstChild; child; child = child.nextSibling)
-        nodeParentPairs.push({parentElement: root, node: child});
+        nodeParentPairs.push({parentElement: containerNode, node: child});
 
     for (var i = 0; i < nodeParentPairs.length; i++)
         processNode(nodeParentPairs[i].parentElement, nodeParentPairs[i].node);
 
     drawArrows();
     initButtons();
-
-    if (typeof(onAfterWebkitXMLViewerLoaded) == 'function')
-      onAfterWebkitXMLViewerLoaded();
 }
 
 // Tree processing.

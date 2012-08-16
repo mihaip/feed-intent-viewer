@@ -9,11 +9,11 @@ onload = function() {
   // bytes as a Blob (see ChromeDownloadManagerDelegate::OpenWithWebIntent) so
   // we don't need to fech the data ourselves.
   if (intent.data instanceof Blob) {
-    handleBlob(intent.data);
+    handleBlob(intent.data, intent.getExtra && intent.getExtra('url'));
     return;
   }
 
-  var url = (intent.getExtra && getExtra('url')) || intent.data;
+  var url = (intent.getExtra && intent.getExtra('url')) || intent.data;
 
   if (url.indexOf('http') != 0 || url.indexOf('/') == -1) {
     showMessage('url-error', url);
@@ -31,7 +31,7 @@ onload = function() {
       showMessage('loading-error', url);
       return;
     }
-    handleBlob(xhr.response);
+    handleBlob(xhr.response, url);
   };
   xhr.onerror = function() {
     hideMessage('loading');
@@ -42,16 +42,21 @@ onload = function() {
   xhr.send();
 }
 
-function handleBlob(inputBlob) {
+function handleBlob(inputBlob, sourceUrl) {
   var reader = new FileReader();
   reader.onload = function() {
     var feedText = reader.result;
     feedText = feedText.replace(/<\?xml-stylesheet\s+[^?>]*\?>/g, '');
 
-    var blobBuilder = new WebKitBlobBuilder();
-    blobBuilder.append(feedText);
-    var displayBlob = blobBuilder.getBlob('text/xml');
-    location.href = webkitURL.createObjectURL(displayBlob);
+    var feedParser = new DOMParser();
+    var feedDocument = new DOMParser().parseFromString(feedText, 'text/xml');
+
+    var xmlViewerNode = document.createElement('div');
+    document.body.appendChild(xmlViewerNode);
+
+    hideMessage('loading');
+
+    appendXmlViewer(feedDocument, xmlViewerNode);
   }
 
   reader.onerror = function() {

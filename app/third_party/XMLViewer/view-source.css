@@ -19,28 +19,8 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-body {
-    margin: 0
-}
-
-table {
-    width: 100%;
-    border-spacing: 0;
-    counter-reset: lines;
-    white-space: pre-wrap !important;
-    margin: 0;
-    word-break: break-word;
-    font-size: initial;
-    font-family: monospace;
-}
-
-td {
-    padding: 0 !important;
-    vertical-align: baseline
-}
 
 .webkit-line-gutter-backdrop, .webkit-line-number {
     /* Keep this in sync with inspector.css (.webkit-line-gutter-backdrop) */
