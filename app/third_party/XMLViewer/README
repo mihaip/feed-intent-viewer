@@ -1,0 +1,7 @@
+XML tree pretty-printer imported from the WebKit repository:
+
+http://trac.webkit.org/browser/trunk/Source/WebCore/xml/XMLTreeViewer.cpp
+http://trac.webkit.org/browser/trunk/Source/WebCore/xml/XMLViewer.css
+http://trac.webkit.org/browser/trunk/Source/WebCore/xml/XMLViewer.js
+
+The WebKit one cannot be invoked directly, since we now display feeds in an iframe, and WebKit's code only triggers in a top frame (see check in XMLTreeViewer::hasNoStyleInformation).
