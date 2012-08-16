@@ -1,4 +1,16 @@
 onload = function() {
+  document.getElementById('controls').onsubmit = function(event) {
+    event.preventDefault();
+
+    document.querySelector('#xml-viewer').innerHTML = '';
+    hideMessage('loading-error');
+    hideMessage('reader-error');
+
+    // We can't use explicit intent dispatch since that opens yet another
+    // window.
+    handleUrl(document.getElementById('url').value);
+  }
+
   var intent = window.webkitIntent;
   if (!intent) {
     location.href = 'intro.html'
@@ -20,21 +32,21 @@ onload = function() {
     return;
   }
 
-  showMessage('loading', url);
+  handleUrl(url);
+}
 
+function handleUrl(url) {
   var xhr = new XMLHttpRequest();
   xhr.overrideMimeType('text/xml');
   xhr.responseType = 'blob';
   xhr.onload = function() {
     if (xhr.status >= 400) {
-      hideMessage('loading');
       showMessage('loading-error', url);
       return;
     }
     handleBlob(xhr.response, url);
   };
   xhr.onerror = function() {
-    hideMessage('loading');
     showMessage('loading-error', url);
   };
   xhr.open('GET', url, true);
@@ -43,28 +55,39 @@ onload = function() {
 }
 
 function handleBlob(inputBlob, sourceUrl) {
+  beginLoading();
+  document.getElementById('url').value = sourceUrl;
+
   var reader = new FileReader();
   reader.onload = function() {
     var feedText = reader.result;
     feedText = feedText.replace(/<\?xml-stylesheet\s+[^?>]*\?>/g, '');
 
-    var feedParser = new DOMParser();
+    // TODO(mihaip): handle parse errors.
     var feedDocument = new DOMParser().parseFromString(feedText, 'text/xml');
 
-    var xmlViewerNode = document.createElement('div');
-    document.body.appendChild(xmlViewerNode);
-
-    hideMessage('loading');
-
-    appendXmlViewer(feedDocument, xmlViewerNode);
+    doneLoading();
+    appendXmlViewer(feedDocument, document.querySelector('#xml-viewer'));
   }
 
   reader.onerror = function() {
-    hideMessage('loading');
+    doneLoading();
     showMessage('reader-error', reader.error.name);
   }
 
   reader.readAsText(inputBlob);
+}
+
+function beginLoading() {
+  var buttonNode = document.querySelector('input[type="submit"]');
+  buttonNode.disabled = true;
+  buttonNode.value = 'Loading...';
+}
+
+function doneLoading() {
+  var buttonNode = document.querySelector('input[type="submit"]');
+  buttonNode.disabled = false;
+  buttonNode.value = 'Load';
 }
 
 function showMessage(id, data) {

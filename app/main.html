@@ -11,16 +11,16 @@
   <script src="main.js"></script>
 </head>
 <body>
-  <h1 class="compact">
+  <form id="controls">
+    <input type="text" id="url">
+    <input type="submit" value="Load">
     <a href="https://chrome.google.com/webstore/detail/oceapojkdgeophkjdijkpbjifdnfimdh">Feed Intent Viewer</a>
-  </h1>
+  </form>
+
+  <div id="xml-viewer"></div>
 
   <div id="url-error" class="message" style="display: none">
     Invoked with the data "<span id="url-error-data"></span>", which does not appear to be a URL.
-  </div>
-
-  <div id="loading" class="message" style="display: none">
-    Loading "<span id="loading-data"></span>"...
   </div>
 
   <div id="loading-error" class="message" style="display: none">

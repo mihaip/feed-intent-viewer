@@ -26,7 +26,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var nodeParentPairs = [];
+var nodeParentPairs;
 
 // Script entry point.
 
@@ -34,6 +34,7 @@ function appendXmlViewer(sourceXML, containerNode)
 {
     containerNode.classList.add('pretty-print');
 
+    nodeParentPairs = [];
     for (var child = sourceXML.firstChild; child; child = child.nextSibling)
         nodeParentPairs.push({parentElement: containerNode, node: child});
 
