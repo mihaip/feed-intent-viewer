@@ -21,8 +21,19 @@ onload = function() {
   // bytes as a Blob (see ChromeDownloadManagerDelegate::OpenWithWebIntent) so
   // we don't need to fech the data ourselves.
   if (intent.data instanceof Blob) {
-    handleBlob(intent.data, intent.getExtra && intent.getExtra('url'));
-    return;
+    var url = intent.getExtra('url');
+
+    // To handle the case where the use reloads the page and expects to see
+    // updated feed data, we only use the blob data for a given URL once.
+    if (!localStorage.lastLoadWasBlob || localStorage.lastLoadedBlobUrl != url) {
+      localStorage.lastLoadWasBlob = true;
+      localStorage.lastLoadedBlobUrl = url;
+      handleBlob(intent.data, url);
+      return;
+    }
+  } else {
+    delete localStorage.lastLoadWasBlob;
+    delete localStorage.lastLoadedBlobUrl;
   }
 
   var url = (intent.getExtra && intent.getExtra('url')) || intent.data;
