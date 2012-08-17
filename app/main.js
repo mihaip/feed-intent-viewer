@@ -49,6 +49,7 @@ onload = function() {
 }
 
 function handleUrl(url) {
+  beginLoading();
   document.getElementById('url').value = url;
   if (url.indexOf('http') != 0 || url.indexOf('/') == -1) {
     showMessage('url-error', url);
@@ -57,13 +58,13 @@ function handleUrl(url) {
 
   var xhr = new XMLHttpRequest();
   xhr.overrideMimeType('text/xml');
-  xhr.responseType = 'blob';
+  xhr.responseType = 'text';
   xhr.onload = function() {
     if (xhr.status >= 400) {
       showMessage('loading-error', url);
       return;
     }
-    handleBlob(xhr.response, url);
+    handleText(xhr.response, url);
   };
   xhr.onerror = function() {
     showMessage('loading-error', url);
@@ -79,14 +80,7 @@ function handleBlob(inputBlob, sourceUrl) {
 
   var reader = new FileReader();
   reader.onload = function() {
-    var feedText = reader.result;
-    feedText = feedText.replace(/<\?xml-stylesheet\s+[^?>]*\?>/g, '');
-
-    // TODO(mihaip): handle parse errors.
-    var feedDocument = new DOMParser().parseFromString(feedText, 'text/xml');
-
-    doneLoading();
-    appendXmlViewer(feedDocument, document.querySelector('#xml-viewer'));
+    handleText(reader.result);
   }
 
   reader.onerror = function() {
@@ -95,6 +89,16 @@ function handleBlob(inputBlob, sourceUrl) {
   }
 
   reader.readAsText(inputBlob);
+}
+
+function handleText(feedText, sourceUrl) {
+  feedText = feedText.replace(/<\?xml-stylesheet\s+[^?>]*\?>/g, '');
+
+  // TODO(mihaip): handle parse errors.
+  var feedDocument = new DOMParser().parseFromString(feedText, 'text/xml');
+
+  doneLoading();
+  appendXmlViewer(feedDocument, document.querySelector('#xml-viewer'));
 }
 
 function beginLoading() {
