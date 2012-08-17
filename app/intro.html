@@ -19,10 +19,10 @@
 
   <p>You may test it out by invoking the "view" intent for a feed below:</p>
 
-  <form id="intent-form">
+  <form id="intent-form" method="GET" action="main.html">
     <label>
       Feed URL:
-      <input type="text" id="feed-url" size="60" value="http://feeds.feedburner.com/PersistentInfo">
+      <input type="text" id="feed-url" name="url" size="60" value="http://feeds.feedburner.com/PersistentInfo">
     </label>
     <input type="submit" value="View">
   </form>

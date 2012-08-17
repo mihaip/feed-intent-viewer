@@ -1,14 +1,21 @@
+var URL_PARAM_PREFIX = '?url=';
+
 onload = function() {
   document.getElementById('controls').onsubmit = function(event) {
-    event.preventDefault();
-
     document.querySelector('#xml-viewer').innerHTML = '';
     hideMessage('loading-error');
     hideMessage('reader-error');
 
-    // We can't use explicit intent dispatch since that opens yet another
-    // window.
-    handleUrl(document.getElementById('url').value);
+    // We let the form submit, so that the feed URL ends up in the location, and
+    // we can then pick it up on reload.
+  }
+
+  // Form parameters trump intents.
+  if (location.search.indexOf(URL_PARAM_PREFIX) == 0) {
+    var url = decodeURIComponent(
+        location.search.substring(URL_PARAM_PREFIX.length));
+    handleUrl(url);
+    return;
   }
 
   var intent = window.webkitIntent;
@@ -25,28 +32,29 @@ onload = function() {
 
     // To handle the case where the use reloads the page and expects to see
     // updated feed data, we only use the blob data for a given URL once.
-    if (!localStorage.lastLoadWasBlob || localStorage.lastLoadedBlobUrl != url) {
-      localStorage.lastLoadWasBlob = true;
-      localStorage.lastLoadedBlobUrl = url;
+    if (!sessionStorage.lastLoadWasBlob ||
+        sessionStorage.lastLoadedBlobUrl != url) {
+      sessionStorage.lastLoadWasBlob = true;
+      sessionStorage.lastLoadedBlobUrl = url;
       handleBlob(intent.data, url);
       return;
     }
   } else {
-    delete localStorage.lastLoadWasBlob;
-    delete localStorage.lastLoadedBlobUrl;
+    delete sessionStorage.lastLoadWasBlob;
+    delete sessionStorage.lastLoadedBlobUrl;
   }
 
   var url = (intent.getExtra && intent.getExtra('url')) || intent.data;
+  handleUrl(url);
+}
 
+function handleUrl(url) {
+  document.getElementById('url').value = url;
   if (url.indexOf('http') != 0 || url.indexOf('/') == -1) {
     showMessage('url-error', url);
     return;
   }
 
-  handleUrl(url);
-}
-
-function handleUrl(url) {
   var xhr = new XMLHttpRequest();
   xhr.overrideMimeType('text/xml');
   xhr.responseType = 'blob';
