@@ -21,6 +21,10 @@ h1, #controls {
   box-shadow: 0 0 5px 2px #888;
   display: -webkit-flex;
   -webit-flex-direction: column;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
 }
 
 #controls #url {
@@ -37,6 +41,10 @@ h1, #controls {
 
 #controls a:hover {
   color: #fc9;
+}
+
+#xml-viewer {
+  margin-top: 4.5em;
 }
 
 p {
