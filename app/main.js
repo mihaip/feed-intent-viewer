@@ -49,8 +49,7 @@ onload = function() {
 }
 
 function handleUrl(url) {
-  beginLoading();
-  document.getElementById('url').value = url;
+  init(url);
   if (url.indexOf('http') != 0 || url.indexOf('/') == -1) {
     showMessage('url-error', url);
     return;
@@ -62,12 +61,14 @@ function handleUrl(url) {
   xhr.onload = function() {
     if (xhr.status >= 400) {
       showMessage('loading-error', url);
+      doneLoading();
       return;
     }
     handleText(xhr.response, url);
   };
   xhr.onerror = function() {
     showMessage('loading-error', url);
+    doneLoading();
   };
   xhr.open('GET', url, true);
 
@@ -75,8 +76,7 @@ function handleUrl(url) {
 }
 
 function handleBlob(inputBlob, sourceUrl) {
-  beginLoading();
-  document.getElementById('url').value = sourceUrl;
+  init(sourceUrl);
 
   var reader = new FileReader();
   reader.onload = function() {
@@ -99,6 +99,12 @@ function handleText(feedText, sourceUrl) {
 
   doneLoading();
   appendXmlViewer(feedDocument, document.querySelector('#xml-viewer'));
+}
+
+function init(url) {
+  beginLoading();
+  document.getElementById('url').value = url;
+  document.getElementById('permalink').href = '?url=' + encodeURIComponent(url);
 }
 
 function beginLoading() {

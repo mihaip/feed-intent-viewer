@@ -27,11 +27,19 @@ h1, #controls {
   position: fixed;
 }
 
+#controls #permalink {
+  display: block;
+  width: 21px;
+  height: 23px;
+  background: url(permalink.png);
+  margin: 3px 5px 0 0;
+}
+
 #controls #url {
   -webkit-flex: 1;
 }
 
-#controls a {
+#controls #cws-link {
   display: block;
   padding: .2em;
   margin-left: 2em;
@@ -39,7 +47,7 @@ h1, #controls {
   text-decoration: none;
 }
 
-#controls a:hover {
+#controls #cws-link:hover {
   color: #fc9;
 }
 
@@ -84,4 +92,14 @@ input[type="submit"][disabled] {
   padding: 10px;
   border-radius: 10px;
   margin: 4em auto;
+}
+
+#footer {
+  color: #999;
+  margin-top: 8em;
+  font-size: 12px;
+}
+
+#footer a {
+  color: #99f;
 }
